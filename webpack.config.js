@@ -11,5 +11,8 @@ module.exports = {
         filename: 'bundle.[hash].js',
         path: appPath('build'),
         publicPath: '/'
+    },
+    devServer: {
+        port: 8267
     }
 };

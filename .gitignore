@@ -4,5 +4,6 @@ build/
 node_modules/
 coverage/
 public/index.html
+.idea/
 
 *.log
