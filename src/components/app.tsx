@@ -1,11 +1,9 @@
-import xs, { Stream } from 'xstream';
-import { VNode, DOMSource } from '@cycle/dom';
-import { extractSinks } from 'cyclejs-utils';
 import isolate from '@cycle/isolate';
+import { Observable } from 'rxjs';
+import { merge, mapTo, filter, map, switchMap } from 'rxjs/operators';
 
 import { driverNames } from '../drivers';
-import { Sources, Sinks, Reducer, Component } from '../interfaces';
-
+import { Sources, Sinks, Component } from '../interfaces';
 import { Counter, State as CounterState } from './counter';
 import { Speaker, State as SpeakerState } from './speaker';
 
@@ -14,28 +12,45 @@ export interface State {
     speaker?: SpeakerState;
 }
 
+function extractSinks<Si>(
+    sinks$: Observable<Si>,
+    driverNames: string[]
+): { [k in keyof Si]-?: Si[k] } {
+    return driverNames
+        .map(d => ({
+            [d]: sinks$.pipe(
+                switchMap(s => s[d]),
+                filter(b => !!b)
+            )
+        }))
+        .reduce((acc, curr) => Object.assign(acc, curr), {}) as any;
+}
+
 export function App(sources: Sources<State>): Sinks<State> {
     const match$ = sources.router.define({
         '/counter': isolate(Counter, 'counter'),
         '/speaker': isolate(Speaker, 'speaker')
     });
 
-    const componentSinks$: Stream<Sinks<State>> = match$
-        .filter(({ path, value }: any) => path && typeof value === 'function')
-        .map(({ path, value }: { path: string; value: Component<any> }) => {
+    const componentSinks$: Observable<Sinks<State>> = match$.pipe(
+        filter(({ path, value }: any) => path && typeof value === 'function'),
+        map(({ path, value }: { path: string; value: Component<any> }) => {
             return value({
                 ...sources,
                 router: sources.router.path(path)
             });
-        });
+        })
+    );
 
-    const redirect$: Stream<string> = sources.router.history$
-        .filter((l: Location) => l.pathname === '/')
-        .mapTo('/counter');
+    const redirect$: Observable<string> = sources.router.history$.pipe(
+        filter((l: Location) => l.pathname === '/'),
+        mapTo('/counter')
+    );
 
     const sinks = extractSinks(componentSinks$, driverNames);
+
     return {
         ...sinks,
-        router: xs.merge(redirect$, sinks.router)
+        router: redirect$.pipe(merge(sinks.router))
     };
 }

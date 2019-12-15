@@ -1,4 +1,4 @@
-import { run } from '@cycle/run';
+import { run } from '@cycle/rxjs-run';
 import { getDrivers, wrapMain } from './drivers';
 import { Component } from './interfaces';
 import { App } from './components/app';
