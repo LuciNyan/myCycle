@@ -1,6 +1,6 @@
 import isolate from '@cycle/isolate';
 import { Observable, empty } from 'rxjs';
-import { merge, mapTo, filter, map, switchMap, tap } from 'rxjs/operators';
+import { merge, mapTo, filter, map, switchMap } from 'rxjs/operators';
 
 import { driverNames } from '../drivers';
 import { Sources, Sinks, Component } from '../interfaces';
