@@ -5,14 +5,16 @@ import { DOMSource } from '@cycle/dom/lib/es6/rxjs';
 import { StateSource, Reducer } from '@cycle/state';
 import { RouterSource, HistoryInput } from 'cyclic-router';
 
-export { Reducer } from '@cycle/state';
+export { StateSource, Reducer } from '@cycle/state';
 
 export type Component<State> = (s: Sources<State>) => Sinks<State>;
 
 export interface Sources<State> {
     DOM: DOMSource;
     router: RouterSource;
-    state: Observable<State>;
+    state: {
+        stream: Observable<State>;
+    };
 }
 
 export interface Sinks<State> {

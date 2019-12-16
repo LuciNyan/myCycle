@@ -1,6 +1,6 @@
 import isolate from '@cycle/isolate';
-import { Observable } from 'rxjs';
-import { merge, mapTo, filter, map, switchMap } from 'rxjs/operators';
+import { Observable, empty } from 'rxjs';
+import { merge, mapTo, filter, map, switchMap, tap } from 'rxjs/operators';
 
 import { driverNames } from '../drivers';
 import { Sources, Sinks, Component } from '../interfaces';
@@ -16,11 +16,20 @@ function extractSinks<Si>(
     sinks$: Observable<Si>,
     driverNames: string[]
 ): { [k in keyof Si]-?: Si[k] } {
+    function get(s: any, d: string): Observable<State> {
+        return s[d];
+    }
+
     return driverNames
         .map(d => ({
             [d]: sinks$.pipe(
-                switchMap(s => s[d]),
-                filter(b => !!b)
+                switchMap(s => {
+                    const ob$ = get(s, d);
+                    return ob$ !== undefined
+                        ? ob$.pipe(filter(b => !!b))
+                        : empty();
+                }),
+                filter(val => !!val)
             )
         }))
         .reduce((acc, curr) => Object.assign(acc, curr), {}) as any;

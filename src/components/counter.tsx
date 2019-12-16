@@ -1,9 +1,10 @@
 import { VNode } from '@cycle/dom';
 import { DOMSource } from '@cycle/dom/lib/cjs/rxjs';
 
-import { Sources, Sinks, Reducer } from '../interfaces';
+import { Sources, Sinks, Reducer, StateSource } from '../interfaces';
+
 import { Observable, of } from 'rxjs';
-import { merge, mapTo, map } from 'rxjs/operators';
+import { merge, mapTo, map, tap } from 'rxjs/operators';
 
 export interface State {
     count: number;
@@ -47,7 +48,6 @@ function model(
 }
 
 function view(state$: Observable<State>): Observable<VNode> {
-    // function view(state$: any): Observable<VNode> {
     return state$.pipe(
         map(({ count }) => (
             <div>
