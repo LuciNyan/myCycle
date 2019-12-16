@@ -1,10 +1,9 @@
 import { VNode } from '@cycle/dom';
 import { DOMSource } from '@cycle/dom/lib/cjs/rxjs';
-
-import { Sources, Sinks, Reducer, StateSource } from '../interfaces';
-
 import { Observable, of } from 'rxjs';
-import { merge, mapTo, map, tap } from 'rxjs/operators';
+import { merge, mapTo, map } from 'rxjs/operators';
+
+import { Sources, Sinks, Reducer } from '../interfaces';
 
 export interface State {
     count: number;

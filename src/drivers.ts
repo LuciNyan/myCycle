@@ -1,5 +1,4 @@
 import { makeDOMDriver } from '@cycle/dom/lib/es6/rxjs';
-
 import { makeHistoryDriver } from '@cycle/history';
 import { withState } from '@cycle/state';
 import { routerify } from 'cyclic-router';

@@ -1,11 +1,10 @@
 import { Observable } from 'rxjs';
 import { VNode } from '@cycle/dom';
 import { DOMSource } from '@cycle/dom/lib/es6/rxjs';
-
-import { StateSource, Reducer } from '@cycle/state';
+import { Reducer } from '@cycle/state';
 import { RouterSource, HistoryInput } from 'cyclic-router';
 
-export { StateSource, Reducer } from '@cycle/state';
+export { Reducer } from '@cycle/state';
 
 export type Component<State> = (s: Sources<State>) => Sinks<State>;
 

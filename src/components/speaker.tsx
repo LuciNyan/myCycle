@@ -1,8 +1,7 @@
-import { Observable, of, from } from 'rxjs';
-import { map, mapTo, withLatestFrom, merge } from 'rxjs/operators';
-
 import { VNode, div, h2, textarea, button } from '@cycle/dom';
 import { DOMSource } from '@cycle/dom/lib/cjs/rxjs';
+import { Observable, of } from 'rxjs';
+import { map, mapTo, withLatestFrom, merge } from 'rxjs/operators';
 
 import { Sources, Sinks, Reducer } from '../interfaces';
 
