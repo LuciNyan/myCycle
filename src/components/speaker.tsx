@@ -41,7 +41,6 @@ function model(updateText$: Observable<string>): Observable<Reducer<State>> {
 }
 
 function view(state$: Observable<State>): Observable<VNode> {
-    // function view(state$: any): Observable<VNode> {
     return state$.pipe(
         map(({ text }) =>
             div([
