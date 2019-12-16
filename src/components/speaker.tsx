@@ -42,26 +42,24 @@ function model(updateText$: Observable<string>): Observable<Reducer<State>> {
 
 function view(state$: Observable<State>): Observable<VNode> {
     return state$.pipe(
-        map(({ text }) =>
-            div([
-                h2('My Awesome Cycle.js app - Page 2'),
-                textarea({
-                    attrs: { id: 'text', rows: '3' },
-                    props: { value: text }
-                }),
-                button(
-                    { attrs: { type: 'button' }, dataset: { action: 'speak' } },
-                    ['Speak to Me!']
-                ),
-                button(
-                    {
-                        attrs: { type: 'button' },
-                        dataset: { action: 'navigate' }
-                    },
-                    ['Page 1']
-                )
-            ])
-        )
+        map(({ text }) => (
+            <div>
+                <h2>My Awesome Cycle.js app - Page 2</h2>
+                <textarea
+                    className=""
+                    id="text"
+                    cols="30"
+                    rows="3"
+                    value={text}
+                ></textarea>
+                <button type="button" data-action="speak">
+                    Speak to Me!
+                </button>
+                <button type="button" data-action="navigate">
+                    Page 1
+                </button>
+            </div>
+        ))
     );
 }
 
