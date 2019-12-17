@@ -1,44 +1,25 @@
 import isolate from '@cycle/isolate';
-import { Observable, empty } from 'rxjs';
-import { merge, mapTo, filter, map, switchMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { merge, mapTo, filter, map } from 'rxjs/operators';
+import { extractSinks } from '../utils/index';
 
 import { driverNames } from '../drivers';
 import { Sources, Sinks, Component } from '../interfaces';
-import { Counter, State as CounterState } from './counter';
-import { Speaker, State as SpeakerState } from './speaker';
+import { Counter, State as CounterState } from './Counter';
+import { Speaker, State as SpeakerState } from './Speaker';
+import { Metronome, State as MetronomeState } from './Metronome';
 
 export interface State {
     counter?: CounterState;
     speaker?: SpeakerState;
-}
-
-function extractSinks<Si>(
-    sinks$: Observable<Si>,
-    driverNames: string[]
-): { [k in keyof Si]-?: Si[k] } {
-    function get(s: any, d: string): Observable<State> {
-        return s[d];
-    }
-
-    return driverNames
-        .map(d => ({
-            [d]: sinks$.pipe(
-                switchMap(s => {
-                    const ob$ = get(s, d);
-                    return ob$ !== undefined
-                        ? ob$.pipe(filter(b => !!b))
-                        : empty();
-                }),
-                filter(val => !!val)
-            )
-        }))
-        .reduce((acc, curr) => Object.assign(acc, curr), {}) as any;
+    metronome?: MetronomeState;
 }
 
 export function App(sources: Sources<State>): Sinks<State> {
     const match$ = sources.router.define({
         '/counter': isolate(Counter, 'counter'),
-        '/speaker': isolate(Speaker, 'speaker')
+        '/speaker': isolate(Speaker, 'speaker'),
+        '/metronome': isolate(Metronome, 'metronome')
     });
 
     const componentSinks$: Observable<Sinks<State>> = match$.pipe(
@@ -53,7 +34,7 @@ export function App(sources: Sources<State>): Sinks<State> {
 
     const redirect$: Observable<string> = sources.router.history$.pipe(
         filter((l: Location) => l.pathname === '/'),
-        mapTo('/counter')
+        mapTo('/metronome')
     );
 
     const sinks = extractSinks(componentSinks$, driverNames);

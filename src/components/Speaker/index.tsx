@@ -3,7 +3,7 @@ import { DOMSource } from '@cycle/dom/lib/cjs/rxjs';
 import { Observable, of } from 'rxjs';
 import { map, mapTo, withLatestFrom, merge } from 'rxjs/operators';
 
-import { Sources, Sinks, Reducer } from '../interfaces';
+import { Sources, Sinks, Reducer } from '../../interfaces';
 
 export interface State {
     text: string;
