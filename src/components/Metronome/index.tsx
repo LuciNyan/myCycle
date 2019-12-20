@@ -49,12 +49,6 @@ function model(
     const add$ = increment$.pipe(mapTo(addToState(1)));
     const subtract$ = decrement$.pipe(mapTo(addToState(-1)));
 
-    // tempo$ = tempo$.pipe(
-    //     map(haru => function (state: State): State {
-    //         return {...state, tempo: haru.tempo};
-    //     })
-    // );
-
     const tempoReducer: (tempo: number) => Reducer<State> = tempo => (
         state: State
     ) => ({
