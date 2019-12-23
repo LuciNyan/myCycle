@@ -1,6 +1,9 @@
 html {
     width: 100%;
     height: 100%;
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
 }
 
 span,
