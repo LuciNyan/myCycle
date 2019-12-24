@@ -88,15 +88,18 @@ function model(
         timeLine
     });
 
-    const hitsReducer: () => Reducer<State> = () => (state: State) => ({
-        ...state,
-        newAddHits: state.clickCount - state.prevHits,
-        continuousHits:
-            state.newAddHits === 0
-                ? 0
-                : state.continuousHits + state.newAddHits,
-        prevHits: state.clickCount
-    });
+    const hitsReducer: () => Reducer<State> = () => (state: State) => {
+        const newAddHits = state.clickCount - state.prevHits;
+        const continuousHits =
+            newAddHits === 0 ? 0 : state.continuousHits + newAddHits;
+
+        return {
+            ...state,
+            newAddHits,
+            continuousHits,
+            prevHits: state.clickCount
+        };
+    };
 
     const add$ = increment$.pipe(mapTo(addToState(1)));
     const subtract$ = decrement$.pipe(mapTo(addToState(-1)));
