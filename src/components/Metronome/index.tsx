@@ -2,6 +2,7 @@ import { VNode } from '@cycle/dom';
 import { DOMSource } from '@cycle/dom/lib/cjs/rxjs';
 import { Observable, of, interval } from 'rxjs';
 import { merge, mapTo, map, tap, filter } from 'rxjs/operators';
+import { get } from 'lodash';
 
 import { Sources, Sinks, Reducer } from '../../interfaces';
 
@@ -183,9 +184,11 @@ function intent(DOM: DOMSource): DOMIntent {
     const tempo$: Observable<number> = DOM.select('.haru')
         .events('input')
         .pipe(
-            map(el =>
-                isNaN(parseInt(el.target.value)) ? 0 : parseInt(el.target.value)
-            ),
+            map(el => {
+                let value = get(el, 'target.value');
+                value = isNaN(parseInt(value)) ? 0 : parseInt(value);
+                return value;
+            }),
             tap(el => console.log(el))
         );
 
