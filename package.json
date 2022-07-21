@@ -62,7 +62,7 @@
     "@types/lodash": "^4.14.149",
     "cyclejs-utils": "^4.0.2",
     "cyclic-router": "^6.0.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "rxjs": "^6.5.3",
     "switch-path": "^1.2.0",
     "xstream": "^11.7.0"
